@@ -1,0 +1,43 @@
+<html>
+<head>
+    <title>Express</title>
+</head>
+<body>
+    <h3>Guestbook</h3>
+
+    <p>
+        <a href="/">[home]</a>
+        <a href="/guestbooks/create">[create]</a>
+    </p>
+
+    <table border="1" width="50%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>name</th>
+                <th>email</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if guestbooks | length < 1 %}
+                <tr>
+                    <td colspan="4">no data</td>
+                </tr>
+            {% else %}
+                {% for guestbook in guestbooks %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ guestbook.name }}</td>
+                        <td>{{ guestbook.email }}</td>
+                        <td>
+                            <a href="#">[edit]</a>
+                            <a href="#">[delete]</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</body>
+</html>
