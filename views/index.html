@@ -3,13 +3,13 @@
     <title>Express</title>
 </head>
 <body>
-    <h3>Hello World</h3>
+    <h3>Guestbook</h3>
 
-    <p>users:</p>
+    <p>total records: {{ total }}</p>
+
     <ul>
-        {% for guestbook in guestbooks %}
-            <li>{{ guestbook.name }}</li>
-        {% endfor %}
+        <li><a href="/guestbooks">[show]</a></li>
+        <li><a href="/guestbooks/create">[insert]</a></li>
     </ul>
 </body>
 </html>
