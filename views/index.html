@@ -1,8 +1,6 @@
-<html>
-<head>
-    <title>Express</title>
-</head>
-<body>
+{% extends "_templates/layout.html" %}
+
+{% block content %}
     <h3>Guestbook</h3>
 
     <p>total records: {{ total }}</p>
@@ -11,5 +9,4 @@
         <li><a href="/guestbooks">[show]</a></li>
         <li><a href="/guestbooks/create">[insert]</a></li>
     </ul>
-</body>
-</html>
+{% endblock %}

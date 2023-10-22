@@ -1,8 +1,6 @@
-<html>
-<head>
-    <title>Express</title>
-</head>
-<body>
+{% extends "../_templates/layout.html" %}
+
+{% block content %}
     <h3>Guestbook</h3>
 
     <p>
@@ -39,5 +37,4 @@
             {% endif %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}
