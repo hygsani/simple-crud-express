@@ -3,9 +3,9 @@ const router = express.Router()
 const db = require('../db')
 
 router.get('/', (req, res, next) => {
-    db.any('SELECT * FROM guestbooks')
+    db.one('SELECT COUNT(*) AS total FROM guestbooks')
         .then((data) => {
-            res.render('index', { guestbooks: data })
+            res.render('index', { total: data.total })
         })
         .catch((err) => {
             console.log(`err: ${err}`)
