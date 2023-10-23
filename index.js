@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const bodyParser = require('body-parser')
 const path = require('path')
 const nunjucks = require('nunjucks')
 const port = 3000
@@ -14,6 +15,8 @@ nunjucks.configure(
 
 app.use(express.static(path.join(__dirname, 'public')))
 app.set('view engine', 'html')
+
+app.use(bodyParser.urlencoded({ extended: true }))
 
 const indexRouter = require('./routes/index')
 const guestbookRouter = require('./routes/guestbook')
