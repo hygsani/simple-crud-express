@@ -1,0 +1,30 @@
+{% extends "../_templates/layout.html" %}
+
+{% block content %}
+    <h3>Guestbook :: Edit</h3>
+
+    <p>
+        <a href="/">[home]</a>
+        <a href="/guestbooks">[guestbooks]</a>
+    </p>
+
+
+    {% if errors | length %}
+        <ul>
+            {% for error in errors %}
+                <li>{{ error.msg }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form method="post" action="/guestbooks/update">
+        <input type="hidden" name="guestbook_id" id="guestbook_id" value="{{ guestbook.guestbook_id }}">
+        <label>name:</label>
+        <input type="text" name="name" id="name" value="{{ guestbook.name }}"/><br />
+        <label>email:</label>
+        <input type="email" name="email" id="email" value="{{ guestbook.email }}"/><br />
+        <label>message:</label>
+        <textarea name="message" id="message" cols="20" rows="3">{{ guestbook.message }}</textarea><br />
+        <input type="submit" value="Update">
+    </form>
+{% endblock %}

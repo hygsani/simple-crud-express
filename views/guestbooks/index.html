@@ -31,8 +31,16 @@
                         <td>{{ guestbook.name }}</td>
                         <td>{{ guestbook.email }}</td>
                         <td>
-                            <a href="#">[edit]</a>
-                            <a href="#">[delete]</a>
+                            <a href="/guestbooks/edit/{{ guestbook.guestbook_id }}">[edit]</a>
+
+                            <form id="delete-form" method="post" action="/guestbooks/delete/{{ guestbook.guestbook_id }}">
+                                <a
+                                    href="javascript:void(0)"
+                                    onclick="confirm('Delete this data?')
+                                        ? document.querySelector('#delete-form').submit()
+                                        : false"
+                                >[delete]</a>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}
