@@ -10,6 +10,12 @@
 
     <p>{% if result %} {{ result }} {% endif %}</p>
 
+    <form method="get" action="/guestbooks">
+        <label>search:</label>
+        <input type="text" name="search" id="search">
+        <input type="submit" value="search!">
+    </form>
+
     <table border="1" width="50%">
         <thead>
             <tr>

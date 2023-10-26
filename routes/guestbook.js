@@ -9,14 +9,20 @@ const formValidator = [
 ]
 
 router.get('/', (req, res, next) => {
+    const searchQuery = req.query.search ? [`%${req.query.search}%`] : []
+    const where = searchQuery.length ? 'name ILIKE $1' : '1=1';
+
     db.any(
         `
             SELECT *
             FROM guestbooks
+            WHERE ${where}
             ORDER BY guestbook_id DESC
-        `
+        `,
+        searchQuery
     )
     .then((data) => {
+        console.log(data)
         res.render('guestbooks/index', { guestbooks: data })
     })
     .catch((err) => {
