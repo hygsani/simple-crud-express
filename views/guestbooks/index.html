@@ -33,7 +33,7 @@
             {% else %}
                 {% for guestbook in guestbooks %}
                     <tr>
-                        <td>{{ loop.index }}</td>
+                        <td>{{ (loop.index + (ROWS_PER_PAGE * currPage) - ROWS_PER_PAGE) if currPage > 1 else loop.index }}</td>
                         <td>{{ guestbook.name }}</td>
                         <td>{{ guestbook.email }}</td>
                         <td>
@@ -52,5 +52,20 @@
                 {% endfor %}
             {% endif %}
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" align="right">
+                    <a href="/guestbooks/?page=1">|<<</a>
+                    <a href="/guestbooks/?page={{ prevPage }}"><</a>
+
+                    {% for i in range(lastPage) %}
+                        <a href="/guestbooks/?page={{ i + 1 }}">{{ i + 1 }}</a>
+                    {% endfor %}
+
+                    <a href="/guestbooks/?page={{ nextPage }}">></a>
+                    <a href="/guestbooks/?page={{ lastPage }}">>>|</a>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 {% endblock %}

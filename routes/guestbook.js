@@ -9,21 +9,56 @@ const formValidator = [
 ]
 
 router.get('/', (req, res, next) => {
-    const searchQuery = req.query.search ? [`%${req.query.search}%`] : []
-    const where = searchQuery.length ? 'name ILIKE $1' : '1=1';
+    const ROWS_PER_PAGE = 10
+    const pageParam = req.query.page ? parseInt((req.query.page - 1) * ROWS_PER_PAGE) : 0
+    const searchParam = req.query.search ? [`%${req.query.search}%`] : []
+    const where = searchParam.length ? 'name ILIKE $1' : '1=1';
 
-    db.any(
+    db.one(
         `
-            SELECT *
+            SELECT COUNT(*) AS total
             FROM guestbooks
-            WHERE ${where}
-            ORDER BY guestbook_id DESC
-        `,
-        searchQuery
+        `
     )
     .then((data) => {
-        console.log(data)
-        res.render('guestbooks/index', { guestbooks: data })
+        let limitQuery = ''
+        let nextPage = ''
+        let prevPage = ''
+        let lastPage = ''
+
+        if (data.total > ROWS_PER_PAGE) {
+            limitQuery = `LIMIT ${ROWS_PER_PAGE} OFFSET ${pageParam}`
+            lastPage = Math.ceil(data.total / ROWS_PER_PAGE)
+            nextPage = parseInt(req.query.page) == lastPage ? lastPage : parseInt(req.query.page) + 1
+            prevPage = parseInt(req.query.page) == 1 ? 1 : parseInt(req.query.page) - 1
+        }
+
+        db.any(
+            `
+                SELECT guestbook_id, name, email
+                FROM guestbooks
+                WHERE ${where}
+                ORDER BY guestbook_id DESC
+                ${limitQuery}
+            `,
+            searchParam
+        )
+        .then((data) => {
+            res.render(
+                'guestbooks/index',
+                {
+                    guestbooks: data,
+                    currPage: parseInt(req.query.page),
+                    nextPage,
+                    prevPage,
+                    lastPage,
+                    ROWS_PER_PAGE
+                }
+            )
+        })
+        .catch((err) => {
+            console.log(`err: ${err}`)
+        })
     })
     .catch((err) => {
         console.log(`err: ${err}`)
