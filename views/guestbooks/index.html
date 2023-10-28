@@ -58,9 +58,13 @@
                     <a href="/guestbooks/?page=1">|<<</a>
                     <a href="/guestbooks/?page={{ prevPage }}"><</a>
 
-                    {% for i in range(lastPage) %}
-                        <a href="/guestbooks/?page={{ i + 1 }}">{{ i + 1 }}</a>
-                    {% endfor %}
+                    <form method="get" action="/guestbooks">
+                        <input size="3" type="text" name="page" id="page" value="{{ currPage }}">
+                    </form>
+
+                    {# for i in range(pageNumStart, totalPageNum) #}
+                        <!-- <a href="/guestbooks/?page={{ i + 1 }}">{{ i + 1 }}</a> -->
+                    {# endfor #}
 
                     <a href="/guestbooks/?page={{ nextPage }}">></a>
                     <a href="/guestbooks/?page={{ lastPage }}">>>|</a>
