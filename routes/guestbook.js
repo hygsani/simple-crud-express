@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { body, validationResult } = require('express-validator')
 const db = require('../db')
+const paginationHelper = require('../helpers/paging')
 
 const formValidator = [
     body('name', 'name must not empty').not().isEmpty(),
@@ -25,22 +26,12 @@ router.get('/', (req, res, next) => {
         `
     )
     .then((data) => {
+        let total = 0
         let limitQuery = ''
-        let currPage = ''
-        let nextPage = ''
-        let prevPage = ''
-        let lastPage = ''
 
         if (data.total > ROWS_PER_PAGE) {
+            total = data.total
             limitQuery = `LIMIT ${ROWS_PER_PAGE} OFFSET ${pageParam}`
-            lastPage = Math.ceil(data.total / ROWS_PER_PAGE)
-
-            currPage = parseInt(req.query.page) && !isNaN(req.query.page)
-                ? (parseInt(req.query.page) > lastPage ? lastPage : parseInt(req.query.page))
-                : 1
-
-            nextPage = currPage == lastPage ? currPage : currPage + 1
-            prevPage = currPage == 1 ? currPage : currPage - 1
         }
 
         db.any(
@@ -54,6 +45,12 @@ router.get('/', (req, res, next) => {
             searchParam
         )
         .then((data) => {
+            const { lastPage, currPage, nextPage, prevPage } = paginationHelper.setPagination(
+                ROWS_PER_PAGE,
+                total,
+                req.query.page
+            )
+
             res.render(
                 'guestbooks/index',
                 {
