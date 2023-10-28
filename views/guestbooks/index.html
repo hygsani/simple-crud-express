@@ -55,19 +55,13 @@
         <tfoot>
             <tr>
                 <td colspan="4" align="right">
-                    <a href="/guestbooks/?page=1">|<<</a>
-                    <a href="/guestbooks/?page={{ prevPage }}"><</a>
-
                     <form method="get" action="/guestbooks">
-                        <input size="3" type="text" name="page" id="page" value="{{ currPage }}">
+                        <a href="/guestbooks/?page=1">|<<</a>
+                        <a href="/guestbooks/?page={{ prevPage }}"><</a>
+                        <input size="3" type="text" name="page" id="page" onkeypress="if (this.value > parseInt(`{{ lastPage }}`)) this.value=`{{ lastPage }}`" value="{{ currPage }}">
+                        <a href="/guestbooks/?page={{ nextPage }}">></a>
+                        <a href="/guestbooks/?page={{ lastPage }}">>>|</a>
                     </form>
-
-                    {# for i in range(pageNumStart, totalPageNum) #}
-                        <!-- <a href="/guestbooks/?page={{ i + 1 }}">{{ i + 1 }}</a> -->
-                    {# endfor #}
-
-                    <a href="/guestbooks/?page={{ nextPage }}">></a>
-                    <a href="/guestbooks/?page={{ lastPage }}">>>|</a>
                 </td>
             </tr>
         </tfoot>

@@ -10,7 +10,6 @@ const formValidator = [
 
 router.get('/', (req, res, next) => {
     const ROWS_PER_PAGE = 2
-    const PAGE_NUM_DELTA = 3
 
     const pageParam = req.query.page && !isNaN(req.query.page)
         ? parseInt((req.query.page - 1) * ROWS_PER_PAGE)
@@ -34,35 +33,14 @@ router.get('/', (req, res, next) => {
 
         if (data.total > ROWS_PER_PAGE) {
             limitQuery = `LIMIT ${ROWS_PER_PAGE} OFFSET ${pageParam}`
+            lastPage = Math.ceil(data.total / ROWS_PER_PAGE)
 
             currPage = parseInt(req.query.page) && !isNaN(req.query.page)
-                ? parseInt(req.query.page)
+                ? (parseInt(req.query.page) > lastPage ? lastPage : parseInt(req.query.page))
                 : 1
 
-            lastPage = Math.ceil(data.total / ROWS_PER_PAGE)
             nextPage = currPage == lastPage ? currPage : currPage + 1
             prevPage = currPage == 1 ? currPage : currPage - 1
-
-            // currPage = parseInt(req.query.page) ? parseInt(req.query.page) : 1,
-            // lastPage = Math.ceil(data.total / ROWS_PER_PAGE)
-
-            // nextPage = currPage == lastPage
-            //     ? lastPage
-            //     : (currPage + PAGE_NUM_DELTA > lastPage ? currPage : currPage + PAGE_NUM_DELTA)
-
-            // prevPage = currPage == 1
-            //     ? 1
-            //     : (currPage - PAGE_NUM_DELTA > 1 ? 1 : currPage - PAGE_NUM_DELTA)
-
-            // totalPageNum = PAGE_NUM_DELTA && currPage < lastPage
-            //                 ? (currPage + PAGE_NUM_DELTA > lastPage ? currPage + ROWS_PER_PAGE : currPage + ROWS_PER_PAGE)
-            //                 : lastPage
-
-            // pageNumStart = PAGE_NUM_DELTA && currPage < lastPage
-            //     ? (currPage + PAGE_NUM_DELTA > lastPage ? currPage - 1 : currPage - 1)
-            //     : currPage - PAGE_NUM_DELTA
-
-            // console.log(totalPageNum,pageNumStart)
         }
 
         db.any(
@@ -80,14 +58,11 @@ router.get('/', (req, res, next) => {
                 'guestbooks/index',
                 {
                     guestbooks: data,
-                    // pageNumStart,
                     currPage,
                     nextPage,
                     prevPage,
                     lastPage,
-                    ROWS_PER_PAGE,
-                    PAGE_NUM_DELTA,
-                    // totalPageNum
+                    ROWS_PER_PAGE
                 }
             )
         })
