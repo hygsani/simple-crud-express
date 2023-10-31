@@ -2,6 +2,12 @@ const test = () => {
     return 'hello'
 }
 
+const setPageParam = (req, ROWS_PER_PAGE) => {
+    return req.query.page && !isNaN(req.query.page)
+                ? parseInt((req.query.page - 1) * ROWS_PER_PAGE)
+                : 0
+}
+
 const setPagination = (rowsPerPage, total, pageParam) => {
     lastPage = Math.ceil(total / rowsPerPage)
 
@@ -20,7 +26,13 @@ const setPagination = (rowsPerPage, total, pageParam) => {
     }
 }
 
+const setLimitQuery = (limit, offset) => {
+    return `LIMIT ${limit} OFFSET ${offset}`
+}
+
 module.exports = {
     test,
-    setPagination
+    setPageParam,
+    setPagination,
+    setLimitQuery
 }
